@@ -25,7 +25,7 @@ impl<'a, W: Write> ToMemcacheValue<W> for &'a [u8] {
     }
 
     fn write_to(&self, stream: &mut W) -> io::Result<()> {
-        match stream.write(self) {
+        match stream.write_all(self) {
             Ok(_) => Ok(()),
             Err(e) => Err(e),
         }
@@ -42,7 +42,7 @@ impl<W: Write> ToMemcacheValue<W> for String {
     }
 
     fn write_to(&self, stream: &mut W) -> io::Result<()> {
-        match stream.write(self.as_bytes()) {
+        match stream.write_all(self.as_bytes()) {
             Ok(_) => Ok(()),
             Err(e) => Err(e),
         }
@@ -59,7 +59,7 @@ impl<'a, W: Write> ToMemcacheValue<W> for &'a str {
     }
 
     fn write_to(&self, stream: &mut W) -> io::Result<()> {
-        match stream.write(self.as_bytes()) {
+        match stream.write_all(self.as_bytes()) {
             Ok(_) => Ok(()),
             Err(e) => Err(e),
         }
@@ -78,7 +78,7 @@ macro_rules! impl_to_memcache_value_for_number {
             }
 
             fn write_to(&self, stream: &mut W) -> io::Result<()> {
-                match stream.write(self.to_string().as_bytes()) {
+                match stream.write_all(self.to_string().as_bytes()) {
                     Ok(_) => Ok(()),
                     Err(e) => Err(e),
                 }
